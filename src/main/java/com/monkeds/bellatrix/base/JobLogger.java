@@ -72,13 +72,14 @@ public class JobLogger {
 
     public static void LogMessage(String messageText, boolean message, boolean warning, boolean error) throws Exception {
 
-        messageText.trim();
+
 
         if (messageText == null || messageText.length() == 0) {
 
             return;
 
         }
+        messageText.trim();
 
         if (!logToConsole && !logToFile && !logToDatabase) {
 
@@ -102,7 +103,7 @@ public class JobLogger {
 
         connection = DriverManager.getConnection("jdbc:" + dbParams.get("dbms") + "://" + dbParams.get("serverName")
 
-                + ":" + dbParams.get("portNumber") + "/", connectionProps);
+                + ":" + dbParams.get("portNumber") + "/"+ dbParams.get("database") , connectionProps);
 
         int t = 0;
 
@@ -176,7 +177,8 @@ public class JobLogger {
 
         if(logToDatabase) {
 
-            stmt.executeUpdate("insert into Log_Values('" + message + "', " + String.valueOf(t) + ")");
+            String sql = "insert into Log_Values values('" + l + "', " + String.valueOf(t) + ")";
+            stmt.executeUpdate(sql);
 
         }
 
