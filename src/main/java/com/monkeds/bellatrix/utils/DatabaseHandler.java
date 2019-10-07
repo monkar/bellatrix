@@ -6,35 +6,35 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 /**
- * Created by monked on 10/3/19.
+ * Created by monked on 10/6/19.
  */
 public class DatabaseHandler extends Handler{
 
     private Connection connection;
-    private String jdbcConection;
+    private String jdbcConnection;
 
-    public DatabaseHandler(String jdbcConection) {
-        this.jdbcConection = jdbcConection;
+    public DatabaseHandler(String jdbcConnection) {
+        this.jdbcConnection = jdbcConnection;
     }
 
     public void publish(LogRecord record) {
         try {
 
-            PreparedStatement preparedStatement;
+            PreparedStatement ps;
             String SQL = "INSERT INTO mylog " +
                     " (type, logger, class, method, message, date) " +
                     " values(?,?,?,?,?,?)";
 
-            connection = DriverManager.getConnection(jdbcConection);
-            preparedStatement = connection.prepareStatement(SQL);
+            connection = DriverManager.getConnection(jdbcConnection);
+            ps = connection.prepareStatement(SQL);
 
-            preparedStatement.setString(1, record.getLevel().getName());
-            preparedStatement.setString(2, record.getLoggerName());
-            preparedStatement.setString(3, record.getSourceClassName());
-            preparedStatement.setString(4, record.getSourceMethodName());
-            preparedStatement.setString(5, record.getMessage());
-            preparedStatement.setTimestamp(6, new Timestamp((new Date()).getTime()));
-            preparedStatement.executeUpdate();
+            ps.setString(1, record.getLevel().getName());
+            ps.setString(2, record.getLoggerName());
+            ps.setString(3, record.getSourceClassName());
+            ps.setString(4, record.getSourceMethodName());
+            ps.setString(5, record.getMessage());
+            ps.setTimestamp(6, new Timestamp((new Date()).getTime()));
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
